@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
-}z
+}
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -25,7 +25,8 @@ repositories {
 
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.12'
-    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'mysql:mysql-connector-java'
 
     testCompileOnly 'org.projectlombok:1.18.12'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
@@ -35,4 +36,14 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
+
+sourceSets {
+    main {
+        resources {
+            srcDirs "src/main/resources", "src/main/resources-${profile}"
+        }
+    }
 }
