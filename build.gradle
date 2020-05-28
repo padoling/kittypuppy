@@ -10,6 +10,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "org.asciidoctor.convert" version "1.5.9.2"
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
@@ -19,23 +23,32 @@ group = 'com.padoling'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
+asciidoctor {
+    dependsOn test
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compileOnly 'org.projectlombok:lombok:1.18.12'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.flywaydb:flyway-core'
     runtimeOnly 'mysql:mysql-connector-java'
+    compileOnly 'org.projectlombok:lombok'
 
-    testCompileOnly 'org.projectlombok:1.18.12'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-}
-
-test {
-    useJUnitPlatform()
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
 
 ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
@@ -46,4 +59,8 @@ sourceSets {
             srcDirs "src/main/resources", "src/main/resources-${profile}"
         }
     }
+}
+
+test {
+    useJUnitPlatform()
 }

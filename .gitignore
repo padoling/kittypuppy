@@ -2,3 +2,6 @@
 .gradle
 .idea
 build
+
+application-devsecret.properties
+application-prodsecret.properties

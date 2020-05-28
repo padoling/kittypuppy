@@ -12,11 +12,8 @@ public class TestController {
     @Value("${profile}")
     private String profile;
 
-    @Value("${core}")
-    private String core;
-
     @GetMapping("/test")
     public String testIndex() {
-        return "Profile : " + this.profile + " & Core : " + this.core;
+        return "Profile : " + this.profile;
     }
 }
