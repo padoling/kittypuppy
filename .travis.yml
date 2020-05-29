@@ -1,7 +1,9 @@
 language: java
 jdk:
-  - openjdk8
-
+- openjdk8
 branches:
   only:
-    - master
+  - master
+notifications:
+  slack:
+    secure: NpDHVc/4YnWNG0EhlfdOH6KRvywUgpTrBcUrYgVQ9BNi3IMJXN8Qe2HEUtsagLfovdnZnowYzQ6xEBdjtl78CuSr0fRYudDoJkDNtdytONPXdbyhKXc0TTHfWIW0rexjCOap8MdIcJHSuQWzyRrDGkj+5KZ3AJqt10Fe/w4Wwv6Vm6giAPwBzUERb9bw9sZvH+94BQs0SoN9VOUON6MaonvIMK9KYHsOBYxS2Ri/0P7D1V19lJGQqgTTcaHrzd4iGCDRCHqYA9KfWB3r8k5XsicAZARF4CDx6hsTzD/cYkiCmfkJ7p8Ju+z02KBcDnJQXw5eiUNEBjieoDaD/bHR1Sf6yRKBk7QyXVFnTIEaUAYyBTmXbw5Ho/vhiBt7puh7M2SiuRAnucnWAgqaTPv0kQEWxiVD0Zzdl6hnFlbtwxOJeqo0XCgvK2Ji0lF8nym6v4uNyY+dzkDcbIdlpA9PVhRYFyvvW5PZ692WSjRE7q61UkuP1ZxJbQxkX+kFunSqrAqRNVlI4t3QkhQz4eJIu6KCq/r3MUMca596pZpfF1TcJ1zKNmg7JCbyXgiex5IaPpEnoOE5BO1GaG6e5kOYssMGnE20lR+gTVOShrZP75HM5IG7MgY34eGoGZX2sPX17MhLnAHjZAmTDIu4Ly/wVGiF7MDG48X9mvIPI3jeVDw=
