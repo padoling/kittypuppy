@@ -1,9 +1,39 @@
 language: java
 jdk:
 - openjdk8
+
 branches:
   only:
   - master
+
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.gradle'
+
+script: "./gradlew clean build"
+
 notifications:
   slack:
     secure: NpDHVc/4YnWNG0EhlfdOH6KRvywUgpTrBcUrYgVQ9BNi3IMJXN8Qe2HEUtsagLfovdnZnowYzQ6xEBdjtl78CuSr0fRYudDoJkDNtdytONPXdbyhKXc0TTHfWIW0rexjCOap8MdIcJHSuQWzyRrDGkj+5KZ3AJqt10Fe/w4Wwv6Vm6giAPwBzUERb9bw9sZvH+94BQs0SoN9VOUON6MaonvIMK9KYHsOBYxS2Ri/0P7D1V19lJGQqgTTcaHrzd4iGCDRCHqYA9KfWB3r8k5XsicAZARF4CDx6hsTzD/cYkiCmfkJ7p8Ju+z02KBcDnJQXw5eiUNEBjieoDaD/bHR1Sf6yRKBk7QyXVFnTIEaUAYyBTmXbw5Ho/vhiBt7puh7M2SiuRAnucnWAgqaTPv0kQEWxiVD0Zzdl6hnFlbtwxOJeqo0XCgvK2Ji0lF8nym6v4uNyY+dzkDcbIdlpA9PVhRYFyvvW5PZ692WSjRE7q61UkuP1ZxJbQxkX+kFunSqrAqRNVlI4t3QkhQz4eJIu6KCq/r3MUMca596pZpfF1TcJ1zKNmg7JCbyXgiex5IaPpEnoOE5BO1GaG6e5kOYssMGnE20lR+gTVOShrZP75HM5IG7MgY34eGoGZX2sPX17MhLnAHjZAmTDIu4Ly/wVGiF7MDG48X9mvIPI3jeVDw=
+
+before_deploy:
+  - zip -r kittypuppy-api *
+  - mkdir -p deploy
+  - mv kittypuppy-api.zip deploy/kittypuppy-api.zip
+
+deploy:
+  provider: s3
+  access_key_id:
+    secure: pqUcjLRL5VjoHRuHSNRQxyGmtr8Pw4bo2VJQ9lH+J1lm/SLPCzbfyxaSuBkfnRvN6YacjzwLWbujdhweD1DEdMCVmyp2CKPBVhFwtcwI1cJc9NGeRlimrlTlPUZZxUsKl6LFzV2hh4VGXI3T3CoEAVSdrz3YdRzuGJ5infQw7JBDnGZOPJyygXx0ktyk7H+Mg+BSf/nyXlclcMkJAYC8Z/+WFTSmsOBRT3ugJl9QjjpaoUaDkD00OpjVXimMOXwzIw0Dg/0kMtPU8d3InppUky0zV2w4u7cSidJkVZnGLs91WW7OXC822b6wj5ChUJxD49OSMfE0hzquKfeyY3cKVV9Y0HmVKcIcrEz6N1WwDQqYRZfkfdLFU1zCRqlLbr4qpKVPPQI4d2nrBEc5hApPZfj+3Ox57DH3hBHiwWO/MsIHc42xv+tbz0TbDGS+HRVOuAgf427B5yqUB8FUSpN5w14XRyyxu1fS/TzBKXjrk396A3ISJ0T6KvJM+rri4ktNXpG3gSkqk6/KWQpP0yLv72lCU5Udq8SMuvEyTc7olDmozyEo3Ez2U03dBqMlPg01SV6pAo2HNvLZ+uPveh7//OZixTLDN/r1u0MqWZDmeY676fWxecjogoyK+CccE5Q7rVyjwUrL9SwoiNnB3ggC+W+rsRibQIzmRv7NmKiED8A=
+  secret_access_key:
+    secure: ELmQs2mIBJfQBv57kvrtjfbUVjWtQk1ZFA2Z2vIkeVEANhkEI2kBM/a4m6wZ0rxxX8+DhKRnh4fmvX+Ht+/jYxzZm1TcCh950hrlqlyZozX5rgfTNKtXVmBFMWbdf5Sg+VGYpN1fZmXdqagTR0ylCL368WNoiNf/pwFXGGLyryfD4cJYVBAMi+YtjB7RC/NLhoTN6HVvy2Fn+Fxd4rtiOW4oGq67hrCKaDe5RhX9TPouybqb50sm0czRa283DkBPzsDmsCZqkbkDgTBezddnRXFaSLy6TL5xFgkj0l+81M5NeE4iUgcPUctilpZ1xMWzl2PV+cvnJzIr2mL5QD9roqwv6QCc9KzBH72YX3iJql/i0yqIcLVBwzkHwYKlbak7sYbIQtlw8bnFFDIJD6D06RF+YyF2kaN8+MlfPV9or8gJ8XGm5jShdAfTqOU2vraW283jCDdc3hzlFze7+mnkvFCqUT9zVgEbP70XDPUSovlyq/jaB4XJdUCTijq2PdUIFXe/gHusqsyF1M4HZdfQH9kYvFQeDtpBKjNU2UGJlLGhQxt5LOcNl1u/I5T8d/Xa3Evo6xuC2/0h+wFFSKTkWE95w5Sq8vagu2LeMUBUASrYXC2Jfz9d7ZDp3Gk8z+R+Y1hrmFuUUGfb5j+h8ntmCw1WpwCf8lCsLLxRRIkIvq4=
+  bucket: kittypuppy-api-deploy
+  region: ap-northeast-2
+  skip_cleanup: true
+  acl: private
+  local_dir: deploy
+  wait-until-deployed: true
+  on:
+    repo: padoling/kittypuppy
+    branch: master
