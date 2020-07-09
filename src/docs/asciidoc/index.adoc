@@ -1,0 +1,14 @@
+= Spring Boot Rest Docs
+:snippets: ../../../build/generated-snippets
+
+== Test API
+=== Request
+CURL:
+include::{snippets}/test-get/curl-request.adoc[]
+Request HTTP Example:
+include::{snippets}/test-get/http-request.adoc[]
+=== Response
+Respone Fields:
+include::{snippets}/test-get/response-fields.adoc[]
+Response HTTP Example:
+include::{snippets}/test-get/http-response.adoc[]
