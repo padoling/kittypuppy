@@ -2,42 +2,33 @@ package com.padoling.kittypuppy.api.user.service;
 
 import com.padoling.kittypuppy.api.user.domain.User;
 import com.padoling.kittypuppy.api.user.domain.UserRepository;
-import com.padoling.kittypuppy.api.user.domain.UserType;
-import com.padoling.kittypuppy.common.util.JwtUtil;
-import com.padoling.kittypuppy.model.user.SignInRequestDto;
-import com.padoling.kittypuppy.model.user.SignUpRequestDto;
+import com.padoling.kittypuppy.api.user.model.UserVO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
 
-    public Long saveUser(SignUpRequestDto request) {
-        User user = User.builder()
-                .email(request.getEmail())
-                .password(request.getPassword())
-                .userName(request.getUserName())
-                .userType(UserType.USER)
-                .createDate(LocalDateTime.now())
-                .build();
+    private final ModelMapper modelMapper;
 
-        return userRepository.save(user).getId();
-    }
-
-    public String createToken(SignInRequestDto request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("User email not found."));
-
-        if(!user.getPassword().equals(request.getPassword())) {
-            throw new IllegalArgumentException("Wrong password.");
+    public Long addUser(UserVO userVO) {
+        if(userRepository.findBySocialTypeAndSocialUid(userVO.getSocialType(), userVO.getSocialUid()).isPresent()) {
+            log.error("User save failed cause requested user already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
-
-        return jwtUtil.createToken();
+        return userRepository.save(userVOToEntity(userVO)).getId();
     }
+
+    private User userVOToEntity(UserVO userVO) {
+        return modelMapper.map(userVO, User.class);
+    }
+
 }

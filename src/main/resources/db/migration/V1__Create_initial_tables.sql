@@ -1,22 +1,23 @@
 CREATE TABLE user (
-    id INT AUTO_INCREMENT,
-    email VARCHAR(255),
-    password VARCHAR(100),
-    user_name VARCHAR(20),
+    id INT NOT NULL AUTO_INCREMENT,
+    social_type ENUM('K', 'G', 'N'),
+    social_uid VARCHAR(100),
     user_type VARCHAR(10),
-    reg_date datetime,
+    nickname VARCHAR(20),
+    email VARCHAR(255),
+    refresh_token VARCHAR(255),
     PRIMARY KEY (id)
 );
 
 CREATE TABLE pet (
-    id INT AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT,
     user_id INT,
     name VARCHAR(20),
-    species VARCHAR(3),
-    sex CHAR(1),
+    species ENUM('C', 'D'),
+    sex ENUM('F', 'M'),
     age INT,
-    photo_url VARCHAR(256),
-    description VARCHAR(256),
+    photo_url VARCHAR(255),
+    description VARCHAR(255),
     PRIMARY KEY (id)
 );
 
@@ -32,7 +33,7 @@ CREATE TABLE post_comment (
     id INT AUTO_INCREMENT,
     post_id INT,
     user_id INT,
-    content VARCHAR(256),
+    content VARCHAR(255),
     PRIMARY KEY (id)
 );
 
@@ -43,9 +44,9 @@ CREATE TABLE post_likes (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE image (
+CREATE TABLE post_image (
     id INT AUTO_INCREMENT,
     post_id INT,
-    image_url VARCHAR(256),
+    image_url VARCHAR(255),
     PRIMARY KEY (id)
 );

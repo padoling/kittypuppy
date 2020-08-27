@@ -2,7 +2,6 @@ package com.padoling.kittypuppy.common.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,7 @@ public class JwtUtilImpl implements JwtUtil {
 
     public JwtUtilImpl(
             @Value("${security.jwt.token.secret-key}") String secretKey,
-            @Value("${security.jwt.token.expire-length") long expireLength
+            @Value("${security.jwt.token.expire-length}") int expireLength
     ) {
         this.secretKey = secretKey;
         this.expireLength = expireLength;
